@@ -1,0 +1,10 @@
+[project]
+name = "lab-03-agentops"
+version = "0.1.0"
+description = "PDPSL lab scaffold for skills, plugins, and bounded AgentOps"
+requires-python = ">=3.11,<3.14"
+dependencies = []
+
+[tool.uv]
+package = false
+

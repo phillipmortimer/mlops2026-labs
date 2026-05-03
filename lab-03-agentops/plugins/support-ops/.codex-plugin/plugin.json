@@ -1,0 +1,14 @@
+{
+  "name": "support-ops",
+  "version": "0.1.0",
+  "displayName": "Support Operations",
+  "description": "A teaching plugin that packages a bounded support-operations skill and local mock tools.",
+  "author": "PDPSL",
+  "license": "MIT",
+  "homepage": "https://github.com/phillipmortimer/mlops2026-labs",
+  "interface": {
+    "displayName": "Support Operations",
+    "description": "Package support-operation behavior as a reusable agent capability."
+  }
+}
+
