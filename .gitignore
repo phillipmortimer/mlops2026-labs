@@ -5,6 +5,11 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 
+# Local secrets and environment variables
+.env
+.env.*
+!.env.example
+
 # Python environments and local tooling caches
 .venv/
 .cache/
@@ -12,4 +17,3 @@ __pycache__/
 # Lab-generated outputs
 artifacts/
 mlruns/
-
