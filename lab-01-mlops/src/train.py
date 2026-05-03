@@ -7,9 +7,12 @@ from pathlib import Path
 
 import joblib
 from sklearn.datasets import load_digits
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, f1_score
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 
 
 ARTIFACTS_DIR = Path("artifacts")
@@ -36,16 +39,41 @@ def load_data() -> tuple:
     return dataset.data, dataset.target
 
 
-def build_model(config: dict) -> LogisticRegression:
+def build_model(config: dict):
     model_config = config["model"]
-    if model_config["type"] != "logistic_regression":
-        raise ValueError(f"Unsupported model type: {model_config['type']}")
+    model_type = model_config["type"]
 
-    return LogisticRegression(
-        C=model_config["C"],
-        max_iter=model_config["max_iter"],
-        solver=model_config["solver"],
-    )
+    if model_type == "logistic_regression":
+        return LogisticRegression(
+            C=model_config["C"],
+            max_iter=model_config["max_iter"],
+            solver=model_config["solver"],
+        )
+
+    if model_type == "random_forest":
+        return RandomForestClassifier(
+            n_estimators=model_config["n_estimators"],
+            max_depth=model_config.get("max_depth"),
+            random_state=config["random_state"],
+        )
+
+    if model_type == "svm":
+        return SVC(
+            C=model_config["C"],
+            kernel=model_config["kernel"],
+            gamma=model_config["gamma"],
+        )
+
+    if model_type == "mlp":
+        return MLPClassifier(
+            hidden_layer_sizes=tuple(model_config["hidden_layer_sizes"]),
+            activation=model_config["activation"],
+            learning_rate_init=model_config["learning_rate_init"],
+            max_iter=model_config["max_iter"],
+            random_state=config["random_state"],
+        )
+
+    raise ValueError(f"Unsupported model type: {model_type}")
 
 
 def save_predictions(output_path: Path, predictions: list[int], labels: list[int]) -> None:
@@ -110,7 +138,8 @@ def main() -> None:
 
     # TODO(student): wrap the train/evaluate workflow in an MLflow run.
 
-    # TODO(student): log parameters such as test_size, random_state, C, max_iter, and solver.
+    # TODO(student): log parameters such as test_size, random_state, model.type,
+    # and the model-specific settings from config["model"].
 
     # TODO(student): log metrics such as accuracy, macro_f1, and test_examples.
 

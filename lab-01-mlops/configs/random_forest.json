@@ -1,0 +1,11 @@
+{
+  "experiment_name": "pdpsl-lab-01-digits",
+  "register_model_name": "pdpsl-digits-classifier",
+  "test_size": 0.2,
+  "random_state": 42,
+  "model": {
+    "type": "random_forest",
+    "n_estimators": 100,
+    "max_depth": 12
+  }
+}

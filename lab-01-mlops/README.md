@@ -41,7 +41,7 @@ By the end of the lab, students should be able to:
 - run a baseline supervised training workflow
 - add `MLflow` experiment tracking
 - log parameters, metrics, and artifacts
-- compare multiple runs
+- compare multiple model types and runs
 - register a selected model
 - use the trained model for simple local inference
 
@@ -52,7 +52,10 @@ lab-01-mlops/
 ├── README.md
 ├── pyproject.toml
 ├── configs/
-│   └── baseline.json
+│   ├── baseline.json
+│   ├── mlp.json
+│   ├── random_forest.json
+│   └── svm.json
 └── src/
     ├── predict.py
     └── train.py
@@ -85,6 +88,8 @@ The starter code already trains a simple classifier and writes local artifacts:
 ```bash
 uv run python src/train.py --config configs/baseline.json
 ```
+
+The baseline config trains a logistic regression classifier.
 
 This will create:
 
@@ -122,17 +127,23 @@ Create an MLflow experiment and log:
 
 - parameters from the config file
 - train/test split metadata
+- the model type and model-specific settings
 - accuracy and macro F1
 - the trained model as an artifact
 
 ### Task 2
-Run at least two variants by changing one or more hyperparameters, for example:
+Run several model variants and compare them in MLflow. Example configs are provided:
 
-- `C`
-- `max_iter`
-- `test_size`
+```bash
+uv run python src/train.py --config configs/baseline.json
+uv run python src/train.py --config configs/random_forest.json
+uv run python src/train.py --config configs/svm.json
+uv run python src/train.py --config configs/mlp.json
+```
 
-Compare the runs in MLflow and identify the best candidate.
+You can also create your own config by changing model type or model-specific settings.
+
+Compare the runs in MLflow and identify the best candidate. Consider both performance and operational tradeoffs such as training time, model simplicity, and reproducibility.
 
 ### Task 3
 Register the selected model in MLflow with a meaningful model name.
@@ -143,12 +154,31 @@ Suggested model name:
 ### Task 4
 Keep the local inference script working with the saved model artifact.
 
+### Optional extension
+Create a small prediction viewer for the digits dataset.
+
+The viewer should:
+
+- load a saved model from `artifacts/model.joblib`
+- display at least 10 digit images from the built-in scikit-learn dataset
+- show the predicted class next to the true label
+- clearly mark correct and incorrect predictions
+- run from the command line
+
+Example command:
+
+```bash
+uv run python src/view_predictions.py --model-path artifacts/model.joblib --count 12
+```
+
+You may choose the output format. For example, the viewer could open a local plot window, write an image file, or generate a small HTML page.
+
 ## Suggested workflow
 
 1. Run the baseline code once without modifications
 2. Read the TODO comments in `src/train.py`
 3. Add MLflow tracking
-4. Run multiple experiments
+4. Run multiple model variants
 5. Register the best model
 6. Verify local inference still works
 
@@ -160,4 +190,8 @@ Students should be able to show:
 - logged parameters and metrics
 - a registered model version
 - a working local prediction script
-- a short explanation of why one run was chosen over another
+- a short explanation of why one model type was chosen over another
+
+Optional extension deliverable:
+
+- a prediction viewer showing sample digit images, predicted labels, true labels, and which examples were misclassified

@@ -1,0 +1,13 @@
+{
+  "experiment_name": "pdpsl-lab-01-digits",
+  "register_model_name": "pdpsl-digits-classifier",
+  "test_size": 0.2,
+  "random_state": 42,
+  "model": {
+    "type": "mlp",
+    "hidden_layer_sizes": [64],
+    "activation": "relu",
+    "learning_rate_init": 0.001,
+    "max_iter": 300
+  }
+}
