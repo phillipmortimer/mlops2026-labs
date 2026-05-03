@@ -50,6 +50,26 @@ You can change the sample sizes:
 python3 scripts/prepare_data.py --support-size 60 --eval-size 20
 ```
 
+## Configure API Keys
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and fill in:
+
+- `OPENAI_API_KEY`
+- `LANGFUSE_PUBLIC_KEY`
+- `LANGFUSE_SECRET_KEY`
+- `LANGFUSE_BASE_URL`
+- `GROUP_ID`
+
+Use a stable `GROUP_ID`, such as `group-03`, so traces can be filtered in Langfuse.
+
+The `.env` file contains secrets and is ignored by Git.
+
 ## Intended Lab Direction
 
 Students will build on this data to:
@@ -63,4 +83,3 @@ Students will build on this data to:
 7. improve the system once and verify the improvement
 
 The main learning objective is trace-first debugging and evidence-based iteration. The system may include light agentic behavior, but this lab should not become a full agent-framework exercise.
-
