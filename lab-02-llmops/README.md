@@ -10,6 +10,34 @@ This lab introduces operational practices for LLM-powered systems:
 
 The lab uses a public customer-support dataset from Bitext as the source for support-triage examples.
 
+## Learning Goals
+
+By the end of the lab, students should be able to:
+
+- run a baseline LLM application
+- explain what an application trace captures
+- instrument an LLM workflow with `Langfuse`
+- run a small eval set
+- compare prompt or model variants
+- identify one concrete failure mode
+- verify whether a change improved behavior
+
+## Project Structure
+
+```text
+lab-02-llmops/
+├── README.md
+├── pyproject.toml
+├── scripts/
+│   └── prepare_data.py
+└── src/
+    ├── app.py
+    ├── data.py
+    ├── eval.py
+    ├── prompts.py
+    └── triage.py
+```
+
 ## Dataset
 
 Dataset source:
@@ -30,12 +58,32 @@ data/
 
 These files are generated locally and are not committed to Git.
 
+## Setup
+
+Install dependencies:
+
+```bash
+uv sync
+```
+
+This creates a local `.venv` and installs the dependencies listed in `pyproject.toml`, including:
+
+- `openai`
+- `langfuse`
+- `python-dotenv`
+
+Check the OpenAI SDK is available:
+
+```bash
+uv run python -c "import openai; print(openai.__version__)"
+```
+
 ## Prepare The Data
 
 From this lab directory:
 
 ```bash
-python3 scripts/prepare_data.py
+uv run python scripts/prepare_data.py
 ```
 
 This downloads the Bitext CSV from Hugging Face and creates:
@@ -47,7 +95,7 @@ This downloads the Bitext CSV from Hugging Face and creates:
 You can change the sample sizes:
 
 ```bash
-python3 scripts/prepare_data.py --support-size 60 --eval-size 20
+uv run python scripts/prepare_data.py --support-size 60 --eval-size 20
 ```
 
 ## Configure API Keys
@@ -70,16 +118,135 @@ Use a stable `GROUP_ID`, such as `group-03`, so traces can be filtered in Langfu
 
 The `.env` file contains secrets and is ignored by Git.
 
-## Intended Lab Direction
+The default model in `.env.example` is `gpt-4o-mini` because it is low cost and works well for structured triage tasks. If your OpenAI organization is verified and has access to GPT-5 models, you can try `gpt-5-mini` or `gpt-5-nano` as model variants.
+
+## Run The Baseline App
+
+First check the app without spending API tokens:
+
+```bash
+uv run python src/app.py --ticket-id support-001 --mock
+```
+
+Then run the real model call:
+
+```bash
+uv run python src/app.py --ticket-id support-001
+```
+
+The app prints a structured support-triage result with:
+
+- predicted `category`
+- predicted `intent`
+- `priority`
+- `draft_response`
+- short `rationale`
+
+At this point, the app works but is operationally blind. It does not yet send traces to Langfuse.
+
+## Run The Eval Set
+
+Check the eval workflow without spending API tokens:
+
+```bash
+uv run python src/eval.py --mock
+```
+
+Run a small real eval:
+
+```bash
+uv run python src/eval.py --limit 5
+```
+
+The eval runner writes per-example outputs to:
+
+```text
+outputs/eval_results.jsonl
+```
+
+It reports:
+
+- category accuracy
+- intent accuracy
+- valid priority rate
+- elapsed time
+
+## Student Tasks
 
 Students will build on this data to:
 
-1. run a baseline support-triage LLM system
-2. instrument it with Langfuse
-3. inspect traces for prompt, model, latency, tokens, cost, and output behavior
-4. run a small eval set
-5. compare at least two prompt or model variants
-6. identify one failure mode
-7. improve the system once and verify the improvement
+### Task 1
+Run the baseline support-triage system and inspect its outputs.
+
+Use both:
+
+```bash
+uv run python src/app.py --ticket-id support-001
+uv run python src/eval.py --limit 5
+```
+
+### Task 2
+Instrument the app with `Langfuse`.
+
+Capture:
+
+- `GROUP_ID`
+- ticket id
+- prompt version
+- model
+- input message
+- structured output
+- expected category and intent
+- latency
+- token usage and cost, if available
+- eval metadata
+
+Suggested files to inspect:
+
+- `src/app.py`
+- `src/eval.py`
+- `src/triage.py`
+
+### Task 3
+Run the eval set and inspect traces in Langfuse.
+
+Look for:
+
+- wrong category
+- wrong intent
+- invalid or unhelpful priority
+- overlong response
+- hallucinated policy or account details
+- unnecessary latency or token usage
+
+### Task 4
+Create and compare one variant.
+
+Examples:
+
+- improve the system prompt in `src/prompts.py`
+- change the model from `OPENAI_MODEL` to `OPENAI_FALLBACK_MODEL`
+- add stricter response guidance
+- add a small validation or retry rule
+
+### Task 5
+Document one improvement.
+
+Explain:
+
+- what failure mode you observed
+- what you changed
+- what evidence suggests the change helped
+- what tradeoff, if any, the change introduced
+
+## Deliverables
+
+Students should be able to show:
+
+- a baseline support-triage run
+- a Langfuse trace for at least one single-ticket run
+- Langfuse traces or scores for a small eval run
+- a comparison between two variants
+- one documented improvement supported by evidence
 
 The main learning objective is trace-first debugging and evidence-based iteration. The system may include light agentic behavior, but this lab should not become a full agent-framework exercise.
