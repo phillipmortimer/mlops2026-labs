@@ -10,6 +10,30 @@ This lab introduces the operational basics of classical MLOps:
 
 The starter project uses the built-in scikit-learn `digits` dataset, so there is no separate dataset download step.
 
+## Prerequisites
+
+You need `uv`, a Python project and environment manager.
+
+Install `uv` with the official installer:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+On Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+After installation, restart your terminal or follow the installer message to update your `PATH`, then check:
+
+```bash
+uv --version
+```
+
+Reference: https://docs.astral.sh/uv/getting-started/installation/
+
 ## Learning goals
 
 By the end of the lab, students should be able to:
@@ -34,15 +58,29 @@ lab-01-mlops/
     └── train.py
 ```
 
-## Setup with uv
+## Setup
+
+From this lab directory, install the project dependencies:
 
 ```bash
 uv sync
 ```
 
+This creates a local `.venv` and installs everything listed in `pyproject.toml`, including:
+
+- `scikit-learn`
+- `joblib`
+- `mlflow`
+
+You do not need to install `MLflow` separately. Check that it is available with:
+
+```bash
+uv run mlflow --version
+```
+
 ## Run the baseline training job
 
-The starter code already trains a simple classifier and writes local artifacts.
+The starter code already trains a simple classifier and writes local artifacts:
 
 ```bash
 uv run python src/train.py --config configs/baseline.json
@@ -54,6 +92,20 @@ This will create:
 - `artifacts/metrics.json`
 - `artifacts/test_predictions.csv`
 - `artifacts/classification_report.json`
+
+## View MLflow runs
+
+Once you have added MLflow tracking and run the training script, start the local MLflow UI:
+
+```bash
+uv run mlflow ui
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000
+```
 
 ## Run local inference
 
