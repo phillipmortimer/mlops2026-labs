@@ -1,0 +1,13 @@
+[project]
+name = "lab-01-mlops"
+version = "0.1.0"
+description = "PDPSL lab scaffold for MLflow-based MLOps"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "joblib==1.5.2",
+  "mlflow==3.5.1",
+  "scikit-learn==1.7.2",
+]
+
+[tool.uv]
+package = false

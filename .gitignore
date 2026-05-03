@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Python environments and local tooling caches
+.venv/
+.cache/
+
+# Lab-generated outputs
+artifacts/
+mlruns/
+

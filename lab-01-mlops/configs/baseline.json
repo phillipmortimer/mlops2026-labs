@@ -1,0 +1,12 @@
+{
+  "experiment_name": "pdpsl-lab-01-digits",
+  "register_model_name": "pdpsl-digits-classifier",
+  "test_size": 0.2,
+  "random_state": 42,
+  "model": {
+    "type": "logistic_regression",
+    "C": 1.0,
+    "max_iter": 1200,
+    "solver": "lbfgs"
+  }
+}
