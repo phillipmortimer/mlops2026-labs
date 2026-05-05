@@ -164,3 +164,18 @@ Students should be able to show:
 ## Design Constraint
 
 Do not turn this lab into a framework comparison. The point is not whether one agent framework is better than another. The point is that reusable agent behavior needs packaging, boundaries, tests, and trajectory-level evidence.
+
+## Stretch Goals
+
+If students complete the core tasks quickly, they can extend the lab with one or more of these challenges:
+
+- add explicit approval checkpoints for sensitive actions, then verify that the agent stops and asks before calling `submit_refund_request`
+- add negative test cases where the customer, order, or refund eligibility is missing, ambiguous, or contradictory
+- define a simple trajectory scoring rubric for success, safety, tool choice, approval behavior, and final response quality
+- compare two versions of the skill instructions on the same fixed task suite and summarize which version behaves more reliably
+- add one new mock tool, such as `lookup_policy` or `create_support_note`, and update the skill boundaries around when it should be used
+- tighten tool schemas or argument validation so malformed tool calls fail clearly and are visible in the trajectory
+- add a maximum step budget and document what the agent should do when it reaches the limit
+- capture trajectories in Langfuse or convert local trajectory records into a format that can be reviewed alongside Lab 2 traces
+- create a small regression suite that must pass before publishing a revised skill or plugin version
+- write a short AgentOps release note describing what changed, which failure mode was fixed, what evidence improved, and what risk remains
