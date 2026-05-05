@@ -250,3 +250,18 @@ Students should be able to show:
 - one documented improvement supported by evidence
 
 The main learning objective is trace-first debugging and evidence-based iteration. The system may include light agentic behavior, but this lab should not become a full agent-framework exercise.
+
+## Stretch Goals
+
+If students complete the core tasks quickly, they can extend the lab with one or more of these challenges:
+
+- compare answers with and without retrieved context, then decide whether failures come from retrieval quality, prompt design, or model behavior
+- require structured JSON output, log validation failures in Langfuse, and add a simple repair or retry step
+- compare `gpt-5-mini` and `gpt-5-nano` on the same eval set for quality, latency, and cost
+- add a simple router that sends easy cases to a cheaper model and harder cases to a stronger model
+- track cost per successful answer, not just total cost
+- label failures by type, such as retrieval, prompt ambiguity, hallucination, formatting, latency, or cost
+- add edge-case evals for ambiguous requests, missing information, conflicting context, malformed inputs, or unsupported requests
+- improve refusal or uncertainty behavior when the answer is not supported by the provided context
+- rerun the original eval set after each improvement to check for regressions
+- write a short ops memo summarizing what changed, what evidence improved, what risk remains, and what should be monitored next
